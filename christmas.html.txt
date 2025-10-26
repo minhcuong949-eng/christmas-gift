@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Món quà Giáng Sinh</title>
+<style>
+  :root{
+    --bg:#071328;
+    --snow:#eef6ff;
+  }
+  html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+  body{
+    background: radial-gradient(ellipse at bottom, #0b2a57 0%, var(--bg) 60%);
+    overflow:hidden;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* scene container */
+  .card{
+    width:920px;
+    max-width:95vw;
+    height:560px;
+    max-height:80vh;
+    border-radius:18px;
+    box-shadow:0 20px 60px rgba(2,8,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+    position:relative;
+    overflow:hidden;
+    padding:24px;
+    box-sizing:border-box;
+  }
+
+  /* Snow (many layers for depth) */
+  .snow, .snow2, .snow3{
+    position:absolute;
+    left:0;top:0;right:0;bottom:0;
+    pointer-events:none;
+    background-image: 
+      radial-gradient(#fff 1px, transparent 2px);
+    opacity:0.7;
+    mix-blend-mode: screen;
+  }
+  .snow{animation:fall 14s linear infinite; transform:translateY(-10%); background-size: 12px 12px;}
+  .snow2{animation:fall 10s linear infinite; transform:translateY(-30%); opacity:0.45; background-size:18px 18px;}
+  .snow3{animation:fall 22s linear infinite; transform:translateY(-50%); opacity:0.25; background-size:6px 6px;}
+  @keyframes fall { from {background-position:0 0} to {background-position:0 3000px} }
+
+  /* Ground */
+  .ground{
+    position:absolute; left:0; right:0; bottom:0; height:160px;
+    background: linear-gradient(180deg,#08213a, #052038 60%, #021319);
+    border-top-left-radius:60% 50px;
+    border-top-right-radius:60% 50px;
+    box-shadow: 0 -6px 40px rgba(0,0,0,0.6) inset;
+  }
+
+  /* Tree */
+  .tree{
+    position:absolute; left:80px; bottom:100px;
+    width:0;height:0;
+  }
+  .branch{
+    width:0; margin-left:-220px;
+    border-left: 220px solid transparent;
+    border-right: 220px solid transparent;
+    border-bottom: 120px solid #0b6b2f;
+    transform-origin:center top;
+    position:relative;
+    left:260px;
+  }
+  .branch:nth-child(1){border-bottom-color:#0b6b2f; transform:translateY(-10px) scale(1.25);}
+  .branch:nth-child(2){border-bottom-color:#0a5f2a; transform:translateY(-40px) scale(1.05);}
+  .branch:nth-child(3){border-bottom-color:#095423; transform:translateY(-70px) scale(0.9);}
+  .trunk{
+    position:absolute; left:250px; bottom: -6px;
+    width:34px;height:42px;background:#6b3d20;border-radius:4px;
+    box-shadow:inset 0 6px 0 rgba(255,255,255,0.05);
+  }
+
+  /* ornaments */
+  .ornament{
+    position:absolute;width:14px;height:14px;border-radius:50%;
+    box-shadow:0 4px 8px rgba(0,0,0,0.4);
+    animation:blink 2.6s infinite ease-in-out;
+  }
+  @keyframes blink{
+    0%{transform:scale(1);opacity:1}
+    50%{transform:scale(1.3);opacity:0.85}
+    100%{transform:scale(1);opacity:1}
+  }
+
+  /* star */
+  .star{
+    position:absolute; left:246px; top:-24px; width:0;height:0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 24px solid #ffd84d;
+    transform: rotate(35deg) skewY(-10deg);
+    filter:drop-shadow(0 4px 8px rgba(255,200,50,0.25));
+    animation:twinkle 2s infinite;
+  }
+  @keyframes twinkle{0%{opacity:1}50%{opacity:.6}100%{opacity:1}}
+
+  /* Santa sleigh (svg) */
+  .santa{
+    position:absolute; top:28%; left:-25%;
+    width:320px; height:auto;
+    transform:translateZ(0);
+    animation:sleigh 14s linear infinite;
+  }
+  @keyframes sleigh{
+    0%{left:-35%; transform:translateY(0)}
+    20%{transform:translateY(-8px)}
+    40%{left:60%; transform:translateY(0)}
+    60%{transform:translateY(-6px)}
+    100%{left:120%}
+  }
+
+  /* greeting text */
+  .greet{
+    position:absolute; right:32px; top:32px; text-align:right;
+    font-weight:600; font-size:20px; letter-spacing:0.6px;
+  }
+  .greet h1{margin:0;font-size:28px; color:#fff;text-shadow: 0 6px 30px rgba(0,0,0,0.6);}
+  .greet p{margin:6px 0 0 0; opacity:0.9; font-size:14px;}
+
+  /* play music button */
+  .controls{
+    position:absolute; right:24px; bottom:22px; display:flex; gap:10px; align-items:center;
+  }
+  .btn{
+    background:linear-gradient(180deg,#ff6b6b,#ff3b3b);
+    border:none;color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;
+    box-shadow: 0 8px 30px rgba(255,60,60,0.18);
+  }
+  .btn.secondary{
+    background:transparent;border:1px solid rgba(255,255,255,0.12);box-shadow:none;font-weight:600;
+  }
+
+  /* small responsive adjustments */
+  @media (max-width:520px){
+    .card{height:78vh;padding:16px}
+    .santa{width:220px}
+    .greet h1{font-size:20px}
+  }
+
+  /* ornament positions (manual placements on the tree) */
+  /* you can add/remove more .ornament elements in HTML to change density */
+</style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Lễ hội Giáng Sinh">
+    <div class="snow"></div>
+    <div class="snow2"></div>
+    <div class="snow3"></div>
+
+    <div class="greet">
+      <h1>Merry Christmas!</h1>
+      <p>Chúc chủ nhân và gia đình một mùa ấm áp & đầy yêu thương 🎄</p>
+    </div>
+
+    <!-- Santa sleigh as inline SVG -->
+    <div class="santa" aria-hidden="true">
+      <!-- simple stylized sleigh + reindeer -->
+      <svg viewBox="0 0 600 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <!-- reindeer (simplified) -->
+        <g transform="translate(20,40) scale(0.9)">
+          <g fill="#8b5e3c">
+            <ellipse cx="80" cy="85" rx="18" ry="12"/>
+            <ellipse cx="115" cy="75" rx="28" ry="18"/>
+            <rect x="60" y="50" width="10" height="30" rx="3"/>
+            <rect x="84" y="46" width="10" height="30" rx="3" transform="skewX(-6)"/>
+          </g>
+          <path d="M40 70 q40 -40 90 -10" fill="none" stroke="#5b3a24" stroke-width="3" />
+        </g>
+
+        <!-- sleigh -->
+        <g transform="translate(170,80)">
+          <path d="M0 0 q30 -30 120 -18 l60 18 q10 8 6 22 l-20 62 q-2 6 -8 8 l-110 0 q-6 -2 -8 -8 l-24 -50 q-6 -12 0 -28 z" fill="#d81e5b"/>
+          <rect x="10" y="6" width="80" height="24" rx="6" fill="#ffb6c1"/>
+          <circle cx="40" cy="10" r="5" fill="#fff"/>
+          <!-- gifts -->
+          <rect x="40" y="-6" width="22" height="18" rx="3" fill="#ffd86b"/><rect x="64" y="-2" width="18" height="14" rx="3" fill="#6bd1ff"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Tree group -->
+    <div class="tree" aria-hidden="true">
+      <div class="branch"></div>
+      <div class="branch"></div>
+      <div class="branch"></div>
+      <div class="trunk"></div>
+      <div class="star" aria-hidden="true"></div>
+
+      <!-- ornaments: manual placement -->
+      <div class="ornament" style="left:215px; top:34px; background:#ff4757; animation-delay:0s"></div>
+      <div class="ornament" style="left:190px; top:74px; background:#f1c40f; animation-delay:.2s"></div>
+      <div class="ornament" style="left:240px; top:92px; background:#1e90ff; animation-delay:.4s"></div>
+      <div class="ornament" style="left:170px; top:122px; background:#9b59b6; animation-delay:.6s"></div>
+      <div class="ornament" style="left:260px; top:140px; background:#2ecc71; animation-delay:.1s"></div>
+      <div class="ornament" style="left:220px; top:160px; background:#ff6b6b; animation-delay:.7s"></div>
+      <div class="ornament" style="left:200px; top:36px; width:10px;height:10px;background:#fff;animation-delay:1s;opacity:.85"></div>
+    </div>
+
+    <div class="ground" aria-hidden="true"></div>
+
+    <!-- controls and audio -->
+    <div class="controls">
+      <button class="btn" id="playBtn" aria-pressed="false">▶ Bật nhạc</button>
+      <button class="btn secondary" id="downloadBtn">Tải / Lưu</button>
+    </div>
+
+    <!-- audio element: replace src with your chosen mp3 -->
+    <audio id="bgm" loop preload="auto">
+      <!-- Placeholder: thay link bằng file mp3 của cậu (hoặc upload cùng thư mục và viết 'music.mp3') -->
+      <source src="https://cdn.pixabay.com/download/audio/2022/12/03/audio_9f0f1b8d6c.mp3?filename=christmas-bells-6108.mp3" type="audio/mpeg">
+      Trình duyệt của bạn không hỗ trợ audio.
+    </audio>
+  </div>
+
+<script>
+  const audio = document.getElementById('bgm');
+  const btn = document.getElementById('playBtn');
+  const dl = document.getElementById('downloadBtn');
+
+  btn.addEventListener('click', async () => {
+    if (audio.paused){
+      try {
+        await audio.play();
+        btn.textContent = '⏸ Tạm dừng';
+        btn.setAttribute('aria-pressed','true');
+      } catch (e) {
+        // autoplay policy may block play -> show fallback
+        alert('Trình duyệt chặn tự phát nhạc. Hãy nhấn "Bật nhạc" lần nữa hoặc thử mở file trên trình duyệt khác.');
+      }
+    } else {
+      audio.pause();
+      btn.textContent = '▶ Bật nhạc';
+      btn.setAttribute('aria-pressed','false');
+    }
+  });
+
+  // download the html as a file (client-side)
+  dl.addEventListener('click', () => {
+    const html = '<!doctype html>\\n' + document.documentElement.outerHTML;
+    const blob = new Blob([html], {type: 'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'christmas_gift.html';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+</script>
+</body>
+</html>
